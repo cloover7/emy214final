@@ -82,13 +82,13 @@ qs_long <- qs_smoothed |>
     values_to = 'Concentration'
   )
 
-plot3 <- qs_long |> 
+plot4 <- qs_long |> 
   ggplot(
     aes(x = window_start, y = Concentration)
   ) + geom_line() +
   facet_wrap(vars(Ion))
 
-plot3
+plot4
 
 # todo: change individual y-axes scale, add site column to qs smoothed and long
 

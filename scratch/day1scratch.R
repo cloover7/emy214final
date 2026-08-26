@@ -1,4 +1,5 @@
 library(tidyverse)
+source('R/movingaverage.R')
 
 # make a first draft of a graph
 
@@ -7,16 +8,6 @@ bisley2 <- read_csv('data/QuebradaCuenca2-Bisley.csv')
 bisley3 <- read_csv('data/QuebradaCuenca3-Bisley.csv')
 rmp <- read_csv('data/RioMameyesPuenteRoto.csv')
 
-bisley1_yr <- bisley1 |> 
-  mutate(Year = year(Sample_Date))
-
-plot1 <- bisley1_yr |> 
-  ggplot(
-    aes(x = Year, y = K)
-  ) +
-  geom_line()
-
-plot1
 
 # combine all data tables
 
@@ -105,3 +96,69 @@ plot4
 
 summed <- comb |> 
   mutate(window = qs_smoothed$window_start[1])
+
+
+
+# try moving avg w my new awesome function
+
+w_func <- moving_average(comb)
+
+
+w_func_long <- w_func |> 
+  pivot_longer(
+    cols = c(k_mgl, no3, mg_mgl, ca, nh4), 
+    names_to = 'Ion',
+    values_to = 'Concentration'
+  )
+
+plot6 <- w_func_long |> 
+  ggplot(
+    aes(x = window_start, y = Concentration)
+  ) + geom_line() +
+  facet_wrap(vars(Ion), scales = 'free_y') 
+
+plot6
+
+
+# ey moment
+ey <- erins_func(comb)
+
+ey_long <- ey |> 
+  pivot_longer(
+    cols = c(k, no3, mg, ca, nh4), 
+    names_to = 'Ion',
+    values_to = 'Concentration'
+  )
+
+plot7 <- ey_long |> 
+  ggplot(
+    aes(x = window_start, y = Concentration, linetype = site)
+  ) + geom_line() +
+  facet_wrap(vars(Ion), scales = 'free_y') 
+
+plot7
+
+# run func on individual plots and then combine REAL AND GOOD ATTEMPT
+
+b1 <- moving_average(bisley1)
+b2 <- moving_average(bisley2)
+b3 <- moving_average(bisley3)
+rmp_ind <- moving_average(rmp)
+
+new_comb <- rbind(b1, b2, b3, rmp_ind)
+
+new_comb_long <- new_comb |> 
+  pivot_longer(
+    cols = c(k_mgl, no3, mg_mgl, ca, nh4), 
+    names_to = 'Ion',
+    values_to = 'Concentration'
+  )
+
+plot8 <- new_comb_long |> 
+  ggplot(
+    aes(x = window_start, y = Concentration, linetype = site)
+  ) +
+  geom_line() +
+  facet_wrap(vars(Ion), scales = 'free', ncol = 1) 
+
+plot8

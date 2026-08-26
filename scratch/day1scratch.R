@@ -38,7 +38,7 @@ plot2
 # add moving averages
 
 qs_smoothed <- tibble(
-  window_start = seq(ymd("1986-05-20"), ymd("2020-12-29"), by = "9 days"),
+  window_start = rep(seq(ymd("1986-05-20"), ymd("2020-12-29"), by = "9 days"), each = 4), # repeats each window 4 times for each site
   k = NA,
   no3 = NA,
   mg = NA,
@@ -47,12 +47,13 @@ qs_smoothed <- tibble(
   site = NA
 )
 
-for (i in 1:nrow(qs_smoothed)) {
-  w1 <- qs_smoothed$window_start[i]
+for (i in 1:nrow(qs_smoothed)) { # for each row
+  # i = 1
+  w1 <- qs_smoothed$window_start[i] 
   w2 <- qs_smoothed$window_start[i] + 9
 
-  for(s in unique(comb$Sample_ID)) {
-  
+  for(s in unique(comb$Sample_ID)) { # for each site 
+  # s = Q2
     # makes a vector 
     pot <- comb$K[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
     no3 <- comb$`NO3-N`[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
@@ -67,8 +68,12 @@ for (i in 1:nrow(qs_smoothed)) {
     qs_smoothed$ca[i] = mean(ca, na.rm = TRUE)
     qs_smoothed$nh4[i] = mean(nh4, na.rm = TRUE)
     qs_smoothed$site[i] = s
+    # site[1] = Q1
   }
+  
 }
+
+qs_smoothed <- qs_smoothed |> mutate(site = rep(c('Q1', 'Q2', 'Q3', 'RMP'), times = 1405))
 
 # make summary w summarize() and get individual data w $ and []
 # 
@@ -84,12 +89,15 @@ qs_long <- qs_smoothed |>
 
 plot5 <- qs_long |> 
   ggplot(
-    aes(x = window_start, y = Concentration)
+    aes(x = window_start, y = Concentration, linetype = site)
   ) + geom_line() +
-  facet_wrap(vars(Ion))
+  facet_wrap(vars(Ion)) 
 
 plot5
 
 # todo: change individual y-axes scale, add site column to qs smoothed and long
 
 # issue: how to get avg per window per site? rn its j per window, assuming across all sites
+
+summed <- comb |> 
+  mutate(window = qs_smoothed$window_start[1])

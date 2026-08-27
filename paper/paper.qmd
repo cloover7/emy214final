@@ -37,6 +37,7 @@ plot1 <- cdat_long |>
   geom_line() +
   facet_wrap(vars(Ion), scales = 'free', ncol = 1) +
   geom_vline(xintercept = ymd('1989-09-17'), linetype = 'dashed') +
+  labs(x = 'Years', y = 'Concentration of Ions')
   theme_bw()
 
 plot1

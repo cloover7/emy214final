@@ -9,9 +9,16 @@ This project examines water quality in terms of concentrations of ions such as N
 This repository contains:
 
 - data folder - contains raw data files in CSV format
+- 1_clean_data.R - script to clean data
+- output folder - contains the cleaned data produced by 1_clean_data.R. This data is ready for analysis.
+- paper folder - contains quarto document explaining the project and process
+- R folder - contains custom functions relevant to data cleaning and analysis
 - scratch folder - contains miscellaneous scratch scripts
 
-Note: data was acesssed via McDowell and International Institute Of Tropical Forestry (IITF) (2024)
+## Data Accessibility
+Data was acesssed via McDowell and International Institute Of Tropical Forestry (IITF) (2024)
+
+All relevant data for this analysis is in the data folder.
 
 ## Authors
 

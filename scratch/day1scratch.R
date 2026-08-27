@@ -179,7 +179,7 @@ plot8 <- new_comb_long |>
     aes(x = window_start, y = Concentration, linetype = site)
   ) +
   geom_line() +
-  facet_wrap(vars(Ion), scales = 'free', ncol = 1) +
+  facet_wrap(vars(Ion), scales = 'free', ncol = 1, strip.position = "left") +
   geom_vline(xintercept = ymd('1989-09-17'), linetype = 'dashed')
 
 plot8

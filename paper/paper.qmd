@@ -1,15 +1,45 @@
-# cool analysis title
+# Analyzing Post-Hurrican Water Quality Data
 
 ## Background
 
-idk my graphs look p close i think
+In September 1989, there was a big hurricane in Puerto Rico. This project analyzes water quality data from various freshwater systems in Puerto Rico after the hurricane.
+
+![look how many ions are prob in this water](https://media.newyorker.com/photos/6331dc33105812508a066849/master/w_2560%2Cc_limit/PR%2520Hurricane%2520Final.jpg)
 
 ## Data
 
+Load libraries and data
+```{r}
+#| output: false
+library(tidyverse)
+cdat <- read_csv('../output/cleaned_data.csv')
+```
+
 ## Methods
+
+```{r}
+cdat_long <- cdat |>
+  pivot_longer(
+    cols = c(k_mgl, no3, mg_mgl, ca, nh4),
+    names_to = 'Ion',
+    values_to = 'Concentration'
+  )
+```
 
 ## Results
 
-cool stuff
+```{r}
+#| warning: false
+plot1 <- cdat_long |>
+  ggplot(
+    aes(x = window_start, y = Concentration, linetype = site)
+  ) +
+  geom_line() +
+  facet_wrap(vars(Ion), scales = 'free', ncol = 1) +
+  geom_vline(xintercept = ymd('1989-09-17'), linetype = 'dashed') +
+  theme_bw()
 
-more stuff
+plot1
+```
+
+Concentrations of potassium, calcium, magnesium and ammonia have increased since the hurricane hit. They have gradually decreased in the 4 years since the hurricane, except for magnesium which has increased.

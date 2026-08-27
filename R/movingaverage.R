@@ -1,9 +1,8 @@
-
 # The input to this function should be a data frame containing stream chemistry data
 moving_average <- function(df) {
   # Initialize a tibble to contain the results
   result <- tibble(
-    window_start = seq(ymd("1986-05-20"), ymd("2020-12-29"), by = '9 weeks'),
+    window_start = seq(ymd("1986-05-20"), ymd("1995-1-1"), by = '9 weeks'),
     k_mgl = NA,
     mg_mgl = NA,
     no3 = NA,
@@ -38,44 +37,61 @@ moving_average <- function(df) {
     result$ca[i] <- mean(ca_window, na.rm = TRUE)
     result$nh4[i] <- mean(nh4_window, na.rm = TRUE)
   }
-  
+
   # Return the result
   return(result)
 }
 
 erins_func <- function(df) {
   qs_smoothed <- tibble(
-  window_start = rep(seq(ymd("1986-05-20"), ymd("2020-12-29"), by = "9 weeks"), each = 4), # repeats each window 4 times for each site
-  k = NA,
-  no3 = NA,
-  mg = NA,
-  ca = NA,
-  nh4 = NA,
-  site = NA
-)
+    window_start = rep(
+      seq(ymd("1986-05-20"), ymd("2020-12-29"), by = "9 weeks"),
+      each = 4
+    ), # repeats each window 4 times for each site
+    k = NA,
+    no3 = NA,
+    mg = NA,
+    ca = NA,
+    nh4 = NA,
+    site = NA
+  )
 
-  for (i in 1:nrow(qs_smoothed)) { 
-    w1 <- qs_smoothed$window_start[i] 
+  for (i in 1:nrow(qs_smoothed)) {
+    w1 <- qs_smoothed$window_start[i]
     w2 <- qs_smoothed$window_start[i] + 63
 
-    for(s in unique(comb$Sample_ID)) { # for each site 
-    # s = Q2
-      # makes a vector 
-      pot <- comb$K[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
-      no3 <- comb$`NO3-N`[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
-      mg <- comb$Mg[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
-      ca <- comb$Ca[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
-      nh4 <- comb$`NH4-N`[comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s]
+    for (s in unique(comb$Sample_ID)) {
+      # for each site
+      # s = Q2
+      # makes a vector
+      pot <- comb$K[
+        comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s
+      ]
+      no3 <- comb$`NO3-N`[
+        comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s
+      ]
+      mg <- comb$Mg[
+        comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s
+      ]
+      ca <- comb$Ca[
+        comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s
+      ]
+      nh4 <- comb$`NH4-N`[
+        comb$Sample_Date >= w1 & comb$Sample_Date < w2 & comb$Sample_ID == s
+      ]
 
       # mean of vector for that window gets put in the corresponding column
-      qs_smoothed$k[i] = mean(pot, na.rm = TRUE)
-      qs_smoothed$no3[i] = mean(no3, na.rm = TRUE)
-      qs_smoothed$mg[i] = mean(mg, na.rm = TRUE)
-      qs_smoothed$ca[i] = mean(ca, na.rm = TRUE)
-      qs_smoothed$nh4[i] = mean(nh4, na.rm = TRUE)
-      qs_smoothed$site[i] = s
+      qs_smoothed$k[i] <- mean(pot, na.rm = TRUE)
+      qs_smoothed$no3[i] <- mean(no3, na.rm = TRUE)
+      qs_smoothed$mg[i] <- mean(mg, na.rm = TRUE)
+      qs_smoothed$ca[i] <- mean(ca, na.rm = TRUE)
+      qs_smoothed$nh4[i] <- mean(nh4, na.rm = TRUE)
+      qs_smoothed$site[i] <- s
     }
   }
-  qs_smoothed <- qs_smoothed |> mutate(site = rep(c('Q1', 'Q2', 'Q3', 'RMP'), times = nrow(qs_smoothed) / 4))
+  qs_smoothed <- qs_smoothed |>
+    mutate(
+      site = rep(c('Q1', 'Q2', 'Q3', 'RMP'), times = nrow(qs_smoothed) / 4)
+    )
   return(qs_smoothed)
 }

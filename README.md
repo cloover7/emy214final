@@ -2,7 +2,7 @@
 
 [![Hurricane Maria](https://www.nesdis.noaa.gov/s3/styles/webp/s3/migrated/2109v1_20170920-HURMaria.png.webp?itok=ENHuGCbh)](https://play.typeracer.com/)
 
-This project examines water quality in terms of concentrations of ions such as Nitrogen, Magnesium, and Ammonium. We aim to recreate graphs produced by Schaefer et al. (2000), specifically figure 3.
+This project examines post-hurricane water quality in terms of concentrations of ions such as Nitrogen, Magnesium, and Ammonium. We aim to replicate graphs produced by Schaefer et al. (2000), specifically figure 3.
 
 ## Contents
 
@@ -20,9 +20,11 @@ Data was acesssed via McDowell and International Institute Of Tropical Forestry 
 
 All relevant data for this analysis is in the data folder.
 
-## Authors
+## Authors & Contributors
 
 Erin Yang
+Calvin Fu
+Ashwin Chockkalingam
 
 ## References
 

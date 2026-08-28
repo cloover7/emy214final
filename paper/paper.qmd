@@ -6,30 +6,32 @@ output: html
 
 ## Background
 
-![look how many ions are prob in this water](https://media.newyorker.com/photos/6331dc33105812508a066849/master/w_2560%2Cc_limit/PR%2520Hurricane%2520Final.jpg)
+![Source: New Yorker](https://media.newyorker.com/photos/6331dc33105812508a066849/master/w_2560%2Cc_limit/PR%2520Hurricane%2520Final.jpg)
 
 In September 1989, Hurricane Hugo hit Puerto Rico. This project analyzes water quality data from various freshwater systems in Puerto Rico after the hurricane. The goal is to recreate figure 3 from Schaefer et al. (2000).
 
-![Schaefer et al. (2000)](https://eds-214-reproducibility-m26.github.io/course-materials/interactive/images/Schaefer_etal_2020_fig3.png)
+![Source: Schaefer et al. (2000)](https://eds-214-reproducibility-m26.github.io/course-materials/interactive/images/Schaefer_etal_2020_fig3.png)
 
 ## Data
 
-Data was acesssed via McDowell and International Institute Of Tropical Forestry (IITF) (2024). Data was cleaned in the 1_clean_data.R file.
+Data was acesssed via McDowell and International Institute Of Tropical Forestry (IITF) (2024). Each row represents a 9 week window. Columns include site, date, ion, and concentration. There were 4 sites: Bisley Q1, Bisley Q2, Bisley Q3, and Rio Mameyes River. Ions measured include Calcium, Potassium, Magnesium, Ammonium, and Ammonia.
 
-Load libraries and data
 ```{r}
 #| output: false
+#| echo: false
+# load libraries and data
 library(tidyverse)
 cdat <- read_csv('../output/cleaned_data.csv')
 ```
 
 ## Methods
 
-To prepare data for plotting, 9-week moving averages were calculated for each site and ion. Data was also filtered to relevant years. Functions for this are located in the R folder, and the data cleaning is contained in 1_clean_data.R. 
+To prepare data for plotting, 9-week moving averages were calculated for each site and ion. Data was also filtered to relevant years. 
 
-We applied `pivot_longer()` to the cleaned data in order to get an Ion and Concentration column. This allows us to facet wrap on Ion.
+In the code below, we reformat the structure of the data in order to graph it.
 
 ```{r}
+# reformat data into long format
 cdat_long <- cdat |>
   pivot_longer(
     cols = c(k_mgl, no3, mg_mgl, ca, nh4),
@@ -40,8 +42,11 @@ cdat_long <- cdat |>
 
 ## Results
 
+Concentrations of potassium, calcium, magnesium and ammonia have increased since the hurricane hit. They have gradually decreased in the 4 years since the hurricane, except for magnesium which has increased. Overall, the graph we generated looks fairly similar to figure 3 from Schaefer et al. (2000).
+
 ```{r}
 #| warning: false
+# multiplot for each ion and site
 plot1 <- cdat_long |>
   ggplot(
     aes(x = window_start, y = Concentration, linetype = site)
@@ -53,7 +58,7 @@ plot1 <- cdat_long |>
     ncol = 1,
     strip.position = "left",
     labeller = labeller(
-      Ion = c(
+      Ion = c( # relabel ion names
         'ca' = 'Ca mg l-1',
         'k_mgl' = 'K mg l-1',
         'mg_mgl' = 'Mg mg l-1',
@@ -62,14 +67,13 @@ plot1 <- cdat_long |>
       )
     )
   ) +
-  geom_vline(xintercept = ymd('1989-09-17'), linetype = 'dashed') +
+  geom_vline(xintercept = ymd('1989-09-17'), linetype = 'dashed') + # add when the hurricane hit
   labs(x = 'Years', y = 'Concentration of Ions') +
   theme_bw()
 
 plot1
 ```
 
-Concentrations of potassium, calcium, magnesium and ammonia have increased since the hurricane hit. They have gradually decreased in the 4 years since the hurricane, except for magnesium which has increased.
 
 ## References
 

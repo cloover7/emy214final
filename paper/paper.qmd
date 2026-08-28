@@ -6,9 +6,11 @@ output: html
 
 ## Background
 
+![look how many ions are prob in this water](https://media.newyorker.com/photos/6331dc33105812508a066849/master/w_2560%2Cc_limit/PR%2520Hurricane%2520Final.jpg)
+
 In September 1989, Hurricane Hugo hit Puerto Rico. This project analyzes water quality data from various freshwater systems in Puerto Rico after the hurricane. The goal is to recreate figure 3 from Schaefer et al. (2000).
 
-![look how many ions are prob in this water](https://media.newyorker.com/photos/6331dc33105812508a066849/master/w_2560%2Cc_limit/PR%2520Hurricane%2520Final.jpg)
+![Schaefer et al. (2000)](https://eds-214-reproducibility-m26.github.io/course-materials/interactive/images/Schaefer_etal_2020_fig3.png)
 
 ## Data
 

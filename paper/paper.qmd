@@ -2,11 +2,13 @@
 
 ## Background
 
-In September 1989, there was a big hurricane in Puerto Rico. This project analyzes water quality data from various freshwater systems in Puerto Rico after the hurricane.
+In September 1989, Hurricane Hugo hit Puerto Rico. This project analyzes water quality data from various freshwater systems in Puerto Rico after the hurricane. The goal is to recreate figure 3 from Schaefer et al. (2000).
 
 ![look how many ions are prob in this water](https://media.newyorker.com/photos/6331dc33105812508a066849/master/w_2560%2Cc_limit/PR%2520Hurricane%2520Final.jpg)
 
 ## Data
+
+Data was acesssed via McDowell and International Institute Of Tropical Forestry (IITF) (2024). Data was cleaned in the 1_clean_data.R file.
 
 Load libraries and data
 ```{r}
@@ -16,6 +18,10 @@ cdat <- read_csv('../output/cleaned_data.csv')
 ```
 
 ## Methods
+
+To prepare data for plotting, 9-week moving averages were calculated for each site and ion. Data was also filtered to relevant years. Functions for this are located in the R folder, and the data cleaning is contained in 1_clean_data.R. 
+
+We applied `pivot_longer()` to the cleaned data in order to get an Ion and Concentration column. This allows us to facet wrap on Ion.
 
 ```{r}
 cdat_long <- cdat |>
@@ -35,7 +41,21 @@ plot1 <- cdat_long |>
     aes(x = window_start, y = Concentration, linetype = site)
   ) +
   geom_line() +
-  facet_wrap(vars(Ion), scales = 'free', ncol = 1, strip.position = "left") +
+  facet_wrap(
+    vars(Ion),
+    scales = 'free',
+    ncol = 1,
+    strip.position = "left",
+    labeller = labeller(
+      Ion = c(
+        'ca' = 'Ca mg l-1',
+        'k_mgl' = 'K mg l-1',
+        'mg_mgl' = 'Mg mg l-1',
+        'nh4' = 'NH4-N µg l-1',
+        'no3' = 'NO3-N µg l-1'
+      )
+    )
+  ) +
   geom_vline(xintercept = ymd('1989-09-17'), linetype = 'dashed') +
   labs(x = 'Years', y = 'Concentration of Ions') +
   theme_bw()

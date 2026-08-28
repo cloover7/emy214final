@@ -12,6 +12,7 @@ This repository contains:
 - 1_clean_data.R - script to clean data
 - output folder - contains the cleaned data produced by 1_clean_data.R. This data is ready for analysis.
 - paper folder - contains quarto document explaining the project and process
+- docs folder - contains html output of quarto document
 - R folder - contains custom functions relevant to data cleaning and analysis
 - scratch folder - contains miscellaneous scratch scripts
 
@@ -23,7 +24,9 @@ All relevant data for this analysis is in the data folder.
 ## Authors & Contributors
 
 Erin Yang
+
 Calvin Fu
+
 Ashwin Chockkalingam
 
 ## References
